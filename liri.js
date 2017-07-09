@@ -1,24 +1,31 @@
-var fs = require('fs');
-
 var arg2 = process.argv[2];
 
 var arg3 = process.argv[3];
 
-var request = require('request');
+//For twitter, spotify and omdb
+var twitter = require("twitter");
+var twitterkeys = require("./keys.js");
+var spotify = require("node-spotify-api");
+var spotifyKeys = require("./keys.js/");
+var omdb = require("./keys.js");
+var request = require("request");
+var fs = require("fs");
 
-//For twitter
-var twitter = require('twitter');
-var keys = require('./keys.js');
-var params =20;
-var client = new twitter({
-	consumer_key: keys.twitterKeys.consumer_key,
-	consumer_secret: keys.twitterKeys.consumer_secret,
-	access_token_key: keys.twitterKeys.access_token_key,
-	access_token_secret: keys.twitterKeys.access_token_secret
-});
+
+
+//Define Consumer keys and tokens
+var keyOne = twitter.twitterKeys.consumer_key;
+var keyTwo = twitter.twitterKeys.consumer_secret; 
+var tokenOne = twitter.twitterKeys.access_token_key;
+var tokenTwo = twitter.twitterKeys.access_token_secret;
+
+var spotifyId = spotifyKeys.spotifyKeys.client_id;
+var spotifySecret = spotifyKeys.spotifyKeys.client_secret;
+
+var omdbKey = omdb.requestKeys.request_key;
+
 
 // For Spotify
-var spotify = require('spotify');
 
 cla(process.argv[2], process.argv[3]);
 
@@ -26,9 +33,9 @@ function cla(command, param) {
 	switch (command) {
 		case "my-tweets" : getTweets();
 		break;
-		case "spotify-this-song" : spotify_this-song(param);
+		case "spotify-this-song" : spotify_this_song(params);
 		break;
-		case "movie-this" : movie_this(param);
+		case "movie-this" : movie_this(params);
 		break;
 		case "do-what-it-says" : do_what_it_says();
 		break;
@@ -36,6 +43,15 @@ function cla(command, param) {
 }
 
 function getTweets() {
+
+var params =20;
+var client = new twitter({
+	consumer_key: keyOne,
+	consumer_secret: keyTwo,
+	access_token_key: tokenOne,
+	access_token_secret: tokenTwo,
+});
+
 	client.get('statuses/user_timeline', params, function(error, tweets, response) {
 		if (!error) {
 			for (var i = 0; i < tweets.length; i++) {
@@ -95,8 +111,3 @@ function do_what_it_says() {
 		cla(parameters[0], parameters[1]);
 	});
 }
-
-// my-tweets
-// spotify-this-song
-// movie-this
-// do-what-it-says
